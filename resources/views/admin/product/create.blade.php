@@ -210,14 +210,14 @@
                     let reader = new FileReader();
                     reader.onload = function (event) {
                         let html = `
-                                <div class='upload__img-box'>
-                                    <div class='img-bg'
-                                        style='background-image:url(${event.target.result})'
-                                        data-file='${file.name}'>
-                                        <div class='upload__img-close'></div>
-                                    </div>
+                            <div class='upload__img-box'>
+                                <div class='img-bg'
+                                    style='background-image:url(${event.target.result})'
+                                    data-file='${file.name}'>
+                                    <div class='upload__img-close'></div>
                                 </div>
-                            `;
+                            </div>
+                        `;
                         imgWrap.append(html);
                     };
                     reader.readAsDataURL(file);
