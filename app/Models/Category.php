@@ -17,7 +17,7 @@ class Category extends Model
 
     public function thumbnail(): Attribute
     {
-        $src = asset('Defult.jpg');
+        $src = asset('default.webp');
         if ($this->media && Storage::exists($this->media->src)) {
             $src = Storage::url($this->media->src);
         }
@@ -43,6 +43,10 @@ class Category extends Model
             }
 
         });
+    }
+
+    public function subCategories(){
+        return $this->hasMany(SubCategory::class);
     }
 
 

@@ -45,7 +45,9 @@
         <!-- start header -->
         @include('web.layouts.partials.header')
         <!-- end of header -->
+
         @yield('content')
+
         <!-- start of wpo-site-footer-section -->
         @include('web.layouts.partials.footer')
         <!-- end of wpo-site-footer-section -->
@@ -85,14 +87,14 @@
 
     <!-- All JavaScript files
     ================================================== -->
-    <script src="{{ asset('web/assets/js/jquery.min') }}"></script>
-    <script src="{{ asset('web/assets/js/bootstrap.bundle.min') }}"></script>
+    <script src="{{ asset('web/assets/js/jquery.min.js') }}"></script>
+    <script src="{{ asset('web/assets/js/bootstrap.bundle.min.js') }}"></script>
     <!-- Plugins for this template -->
-    <script src="{{ asset('web/assets/js/modernizr.custom') }}"></script>
-    <script src="{{ asset('web/assets/js/jquery.dlmenu') }}"></script>
-    <script src="{{ asset('web/assets/js/jquery-plugin-collection') }}"></script>
+    <script src="{{ asset('web/assets/js/modernizr.custom.js') }}"></script>
+    <script src="{{ asset('web/assets/js/jquery.dlmenu.js') }}"></script>
+    <script src="{{ asset('web/assets/js/jquery-plugin-collection.js') }}"></script>
     <!-- Custom script for this template -->
-    <script src="{{ asset('web/assets/js/script') }}"></script>
+    <script src="{{ asset('web/assets/js/script.js') }}"></script>
 </body>
 
 </html>
