@@ -1,138 +1,227 @@
-@extends('admin.layouts.app')
+@extends('web.layouts.app')
 @section('content')
-    <div class="card">
-        <div class="card-header d-flex justify-content-between align-items-center">
-            <h5 class="pb-0">Product Details</h5>
-            <a href="{{ route('product.index') }}" class="btn btn-primary btn-lg d-inline-flex align-items-center gap-1">
-                <div class="mr-1">
-                    <i class="fa fa-arrow-left"></i>
-                </div>
-                <span class="ms-1">Back</span>
-            </a>
-        </div>
-        <div class="card-body">
-            {{-- {{ $product }} --}}
-            <div class="sectionCard mb-5 mt-2">
-                <span class="sectionTitle">Product Info</span>
-                <div class="row mt-4">
-                    <div class="col-12">
-                        <p>Product Name:</p>
-                        <h5>{{ $product->name }}</h5>
-                    </div>
-                    <div class="col-12 mt-3">
-                        <p>Short Description:</p>
-                        <h5>{{ $product->details?->short_description }}</h5>
-                    </div>
-                    <div class="col-12 mt-3">
-                        <p>Tags:</p>
-                        @foreach ($product->tags as $tag)
-                            <h6 class="mb-1 btn btn-primary text-white">{{ $tag->name }}</h6>
-                        @endforeach
+    <!-- start wpo-page-title -->
+    <section class="wpo-page-title">
+        <h2 class="d-none">Hide</h2>
+        <div class="container">
+            <div class="row">
+                <div class="col col-xs-12">
+                    <div class="wpo-breadcumb-wrap">
+                        <ol class="wpo-breadcumb-wrap">
+                            <li><a href="{{ route('root') }}">Home</a></li>
+                            <li>Shop</li>
+                        </ol>
                     </div>
                 </div>
-            </div>
+            </div> <!-- end row -->
+        </div> <!-- end container -->
+    </section>
+    <!-- end page-title -->
 
-            <div class="sectionCard mb-5">
-                <span class="sectionTitle">General Information</span>
-                <div class="row mt-4">
-                    <div class="col-md-6 mt-3">
-                        <p>Category Name:</p>
-                        <h5>{{ $product->details?->category?->name }}</h5>
-                    </div>
-                    <div class="col-md-6 mt-3">
-                        <p>Sub-Category Name:</p>
-                        <h5>{{ $product->details?->subCategory?->name }}</h5>
-                    </div>
-                    <div class="col-md-6 mt-3">
-                        <p>Product SKU:</p>
-                        <h5>{{ $product->sku_code }}</h5>
-                    </div>
-                    <div class="col-md-6 mt-3">
-                        <p>Product SKU:</p>
-                        <h5>{{ $product->sku_code }}</h5>
-                    </div>
-                    <div class="col-md-6 mt-3">
-                        <p>Buying Price:</p>
-                        <h5>{{ $product->by_price }}</h5>
-                    </div>
-                    <div class="col-md-6 mt-3">
-                        <p>Selling Price:</p>
-                        <h5>{{ $product->price }}</h5>
-                    </div>
-
-                </div>
-            </div>
-
-            <div class="sectionCard mb-5">
-                <span class="sectionTitle">Product Description</span>
-                <div class="row mt-4">
-                    <div class="col-12">
-                        <p>Description:</p>
-                        {!! $product->details?->description !!}
-                    </div>
-                    @if ($product->details?->additional_information)
-                        <div class="col-12 mt-3">
-                            <p>Additional Information:</p>
-                            {!! $product->details?->additional_information !!}
+    <!-- product-area-start -->
+    <div class="shop-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="shop-filter-wrap">
+                        <div class="filter-item">
+                            <div class="shop-filter-item">
+                                <div class="shop-filter-search">
+                                    <form>
+                                        <div>
+                                            <input type="text" class="form-control" placeholder="Search..">
+                                            <button type="submit"><i class="ti-search"></i></button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
-                    @endif
-
-                </div>
-            </div>
-
-            <div class="sectionCard mb-5">
-                <span class="sectionTitle">Product Images</span>
-                <div class="row mt-4">
-                    <div class="col-12 mb-3">
-                        <h5 class="mb-2">product Thumbnail:</h5>
-                        <img src="{{ $product?->thumbnail }}" alt="product thumbnail" class="w-25">
+                        <div class="filter-item">
+                            <div class="shop-filter-item category-widget">
+                                <h2>Categories</h2>
+                                <ul>
+                                    @foreach ($categories ?? [] as $category)
+                                        <li><a href="#">{{ $category?->name }}<span>(10)</span></a></li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="filter-item">
+                            <div class="shop-filter-item">
+                                <h2>Filter by price</h2>
+                                <div class="shopWidgetWraper">
+                                    <div class="priceFilterSlider">
+                                        <form action="#" method="get" class="clearfix">
+                                            <!-- <div id="sliderRange"></div>
+                                                                                <div class="pfsWrap">
+                                                                                    <label>Price:</label>
+                                                                                    <span id="amount"></span>
+                                                                                </div> -->
+                                            <div class="d-flex">
+                                                <div class="col-lg-6 pe-2">
+                                                    <label for="" class="form-label">Min</label>
+                                                    <input type="text" class="form-control" placeholder="Min" value="0">
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    <label for="" class="form-label">Max</label>
+                                                    <input type="text" class="form-control" placeholder="Max"
+                                                        value="100000">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-12 mt-4">
+                                                <button class="form-control bg-light">Submit</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="filter-item">
+                            <div class="shop-filter-item">
+                                <h2>Color</h2>
+                                <ul>
+                                    @foreach ($colors ?? [] as $color)
+                                        <li>
+                                            <label class="topcoat-radio-button__label">
+                                                {{ $color?->name }} <span>(21)</span>
+                                                <input type="radio" name="topcoat2">
+                                                <span class="topcoat-radio-button"></span>
+                                            </label>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="filter-item">
+                            <div class="shop-filter-item">
+                                <h2>Size</h2>
+                                <ul>
+                                    @foreach ($sizes ?? [] as $size)
+                                        <li>
+                                            <label class="topcoat-radio-button__label">
+                                                {{ $size?->name }} <span>(10)</span>
+                                                <input type="radio" name="topcoat3">
+                                                <span class="topcoat-radio-button"></span>
+                                            </label>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="filter-item">
+                            <div class="shop-filter-item new-product">
+                                <h2>New Products</h2>
+                                <ul>
+                                    @foreach ($newProducts ?? [] as $product)
+                                        <li>
+                                            <div class="product-card">
+                                                <div class="card-image">
+                                                    <div class="image" style="max-height: 100%;">
+                                                        <img src="{{ $product?->thumbnail }}" class="img-fluid w-100 h-100"
+                                                            style="object-fit: cover;" alt="">
+                                                    </div>
+                                                </div>
+                                                <div class="content">
+                                                    <h3><a
+                                                            href="{{route('singleProduct', $product?->slug) }}">{{ Str::limit($product?->name, 20) }}</a>
+                                                    </h3>
+                                                    <div class="rating-product">
+                                                        <i class="fi flaticon-star"></i>
+                                                        <i class="fi flaticon-star"></i>
+                                                        <i class="fi flaticon-star"></i>
+                                                        <i class="fi flaticon-star"></i>
+                                                        <i class="fi flaticon-star"></i>
+                                                        <span>30</span>
+                                                    </div>
+                                                    <div class="price">
+                                                        @if ($product?->discount_price && $product?->discount_price > 0)
+                                                            <span class="present-price">${{ $product?->discount_price }}</span>
+                                                            <del class="old-price">${{ $product?->price }}</del>
+                                                        @else
+                                                            <span class="present-price">${{ $product?->price }}</span>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="filter-item">
+                            <div class="shop-filter-item tag-widget">
+                                <h2>Popular Tags</h2>
+                                <ul>
+                                    @foreach ($tags ?? [] as $tag)
+                                        <li><a href="#">{{ $tag?->name }}</a></li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-12 mb-3">
-                        <h5 class="mb-2">Product Gallery:</h5>
-                        <div class="row">
-                            @foreach ($productGalleries as $gallery)
-                                <div class="col-sm-6 col-md-3 col-lg-2">
-                                    <img src="{{ $gallery['src'] }}" alt="product gallery" class="w-100">
+                </div>
+                <div class="col-lg-8">
+                    <div class="shop-section-top-inner">
+                        <div class="shoping-product">
+                            <p>We found <span>{{ $totalProducts ?? 0}} items</span> for you!</p>
+                        </div>
+                        <div class="short-by">
+                            <ul>
+                                <li>
+                                    Sort by:
+                                </li>
+                                <li>
+                                    <select name="show">
+                                        <option value="">Default Sorting</option>
+                                        <option value="">Low To High</option>
+                                        <option value="">High To Low</option>
+                                    </select>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="product-wrap">
+                        <div class="row align-items-center">
+                            @foreach ($products ?? [] as $product)
+                                <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6 col-12">
+                                    <div class="product-item">
+                                        <div class="image" style="max-height: 250px; min-height: 250px; object-fit: cover;">
+                                            <img src="{{ $product?->thumbnail }}" alt="">
+                                            {{-- <div class="tag new">New</div> --}}
+                                        </div>
+                                        <div class="text">
+                                            <h2><a
+                                                    href="{{ route('singleProduct', $product?->slug) }}">{{ Str::limit($product?->name, 20) }}</a>
+                                            </h2>
+                                            <div class="rating-product">
+                                                <i class="fi flaticon-star"></i>
+                                                <i class="fi flaticon-star"></i>
+                                                <i class="fi flaticon-star"></i>
+                                                <i class="fi flaticon-star"></i>
+                                                <i class="fi flaticon-star"></i>
+                                                <span>130</span>
+                                            </div>
+                                            <div class="price">
+                                                @if ($product?->discount_price && $product?->discount_price > 0)
+                                                    <span class="present-price">${{ $product?->discount_price }}</span>
+                                                    <del class="old-price">${{ $product?->price }}</del>
+                                                @else
+                                                    <span class="present-price">${{ $product?->price }}</span>
+                                                @endif
+                                            </div>
+                                            <div class="shop-btn">
+                                                <a class="theme-btn-s2"
+                                                    href="{{ route('singleProduct', $product?->slug) }}">Shop Now</a>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             @endforeach
                         </div>
                     </div>
                 </div>
             </div>
-
-            <div class="d-flex justify-content-between align-items-lg-center gap-2">
-                <a href="{{ route('product.index') }}" class="btn btn-secondary btn-lg px-5">
-                    <i class="fa fa-arrow-left me-2"></i>
-                    Back
-                </a>
-                <a href="{{ route('product.edit', $product->id) }}" class="btn btn-primary btn-lg px-5">
-                    Edit
-                    <i class="fa fa-edit me-2"></i>
-                </a>
-            </div>
         </div>
     </div>
+    <!-- product-area-end -->
 @endsection
-
-@push('style')
-    <style>
-        .sectionCard {
-            position: relative;
-            border: 1px solid #ebebeb;
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 10px;
-        }
-
-        .sectionTitle {
-            position: absolute;
-            top: -15px;
-            left: 15px;
-            /* font-weight: 600; */
-            font-size: 18px;
-            padding: 2px 20px;
-            background: #ededed;
-            border-radius: 5px;
-        }
-    </style>
-@endpush

@@ -53,10 +53,10 @@
                                     <div class="priceFilterSlider">
                                         <form action="#" method="get" class="clearfix">
                                             <!-- <div id="sliderRange"></div>
-                                                                                    <div class="pfsWrap">
-                                                                                        <label>Price:</label>
-                                                                                        <span id="amount"></span>
-                                                                                    </div> -->
+                                                                                <div class="pfsWrap">
+                                                                                    <label>Price:</label>
+                                                                                    <span id="amount"></span>
+                                                                                </div> -->
                                             <div class="d-flex">
                                                 <div class="col-lg-6 pe-2">
                                                     <label for="" class="form-label">Min</label>
