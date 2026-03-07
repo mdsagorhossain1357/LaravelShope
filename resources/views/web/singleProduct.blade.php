@@ -50,7 +50,9 @@
                         </div>
                     </div>
                     <div class="col-lg-7">
-                        <div class="product-single-content">
+                        <form action="{{ route('cart.store') }}" method="post" class="product-single-content">
+                            @csrf
+                            <input type="hidden" name="product_id" value="{{ $product?->id }}">
                             <h2>{{ $product?->name }}</h2>
                             <div class="price">
                                 @if ($product?->discount_price && $product?->discount_price > 0)
@@ -74,11 +76,17 @@
                                     <span>Color :</span>
                                     <ul>
                                         @foreach ($productColors ?? [] as $color)
-                                            <li class=""><input id="a1" type="radio" name="color" value="{{ $color?->id }}">
-                                                <label for="" style="background-color: {{ $color?->color_code }}"></label>
+                                            <li class="">
+                                                <input id="color{{ $color?->id }}" type="radio" name="color"
+                                                    value="{{ $color?->id }}">
+                                                <label for="color{{ $color?->id }}"
+                                                    style="background-color: {{ $color?->color_code }}"></label>
                                             </li>
                                         @endforeach
                                     </ul>
+                                    @error('color')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
                                 </div>
                             </div>
                             <div class="product-filter-item color filter-size">
@@ -92,15 +100,29 @@
                                             </li>
                                         @endforeach
                                     </ul>
+                                    @error('size')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
                                 </div>
                             </div>
                             <div class="pro-single-btn">
                                 <div class="quantity cart-plus-minus">
-                                    <input class="text-value" type="text" value="1">
+                                    <input name="quantity" class="text-value" type="number" value="1">
                                 </div>
-                                <a href="#" class="theme-btn-s2">Add to cart</a>
-                                <a href="#" class="wl-btn"><i class="fi flaticon-heart"></i></a>
+                                <button type="submit" class="theme-btn-s2 border-0">Add to cart</button>
+                                @if ($user->wishlists()->where('product_id', $product?->id)->exists())
+                                    <a href="{{ route('wishlist.destroy', $product?->slug) }}" class="wl-btn">
+                                        <i class="fa-solid fa-heart"></i>
+                                    </a>
+                                @else
+                                    <a href="{{ route('wishlist.store', $product?->slug) }}" class="wl-btn"><i
+                                            class="fi flaticon-heart"></i></a>
+                                @endif
+
                             </div>
+                            @error('quantity')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
                             <ul class="important-text">
                                 <li><span>SKU: </span> {{ $product?->sku_code }}</li>
                                 <li><span>Categories:</span> {{ $product?->details?->category?->name }}</li>
@@ -112,7 +134,7 @@
                                 @endphp
                                 <li><span>Tags:</span> {{ implode(', ', $tagNames) }}</li>
                             </ul>
-                        </div>
+                        </form>
                     </div>
                 </div>
             </div>
