@@ -9,8 +9,8 @@
                 <div class="col col-xs-12">
                     <div class="wpo-breadcumb-wrap">
                         <ol class="wpo-breadcumb-wrap">
-                            <li><a href="index.html">Home</a></li>
-                            <li><a href="cart.html">Cart</a></li>
+                            <li><a href="{{ route('root') }}">Home</a></li>
+                            <li><a href="{{ route('cart.index')}}">Cart</a></li>
                             <li>Checkout</li>
                         </ol>
                     </div>
@@ -27,11 +27,12 @@
                 <div class="col-12">
                     <div class="single-page-title">
                         <h2>Your Checkout</h2>
-                        <p>There are 4 products in this list</p>
+                        <p>There are {{ $cartItems->count() ?? 0 }} products in this list</p>
                     </div>
                 </div>
             </div>
-            <form>
+            <form action="{{ route('order.store') }}" method="POST">
+                @csrf
                 <div class="checkout-wrap">
                     <div class="row">
                         <div class="col-lg-8 col-12">
@@ -44,46 +45,49 @@
                                         <div class="contact-form form-style">
                                             <div class="row">
                                                 <div class="col-lg-6 col-md-12 col-12">
-                                                    <input type="text" placeholder="First Name*" id="fname1" name="fname">
+                                                    <input type="text" placeholder="Name*" id="fname1" name="name"
+                                                        value="{{ old('firstName') ?? $user->name }}">
                                                 </div>
+                                                {{-- <div class="col-lg-6 col-md-12 col-12">
+                                                    <input type="text" placeholder="Last Name*" id="fname2" name="lastName">
+                                                </div> --}}
                                                 <div class="col-lg-6 col-md-12 col-12">
-                                                    <input type="text" placeholder="Last Name*" id="fname2" name="fname">
-                                                </div>
-                                                <div class="col-lg-6 col-md-12 col-12">
-                                                    <select name="address" id="Country" class="form-control">
+                                                    <select name="country" id="Country" class="form-control"
+                                                        value="{{ old('country') }}">
                                                         <option disabled="" selected="">Country*</option>
-                                                        <option>United State</option>
-                                                        <option>Bangladesh</option>
-                                                        <option>India</option>
-                                                        <option>Srilanka</option>
-                                                        <option>Pakisthan</option>
-                                                        <option>Afgansthan</option>
+                                                        <option value="bangladesh">Bangladesh</option>
+                                                        <option value="india">India</option>
+                                                        <option value="pakisthan">Pakisthan</option>
                                                     </select>
                                                 </div>
                                                 <div class="col-lg-6 col-md-12 col-12">
-                                                    <input type="text" placeholder="City / Town*" id="City" name="City">
+                                                    <input type="text" placeholder="City / Town*" id="City" name="city"
+                                                        value="{{ old('city')}}">
                                                 </div>
                                                 <div class="col-lg-6 col-md-12 col-12">
-                                                    <input type="text" placeholder="Postcode / ZIP*" id="Post2" name="Post">
+                                                    <input type="text" placeholder="Postcode / ZIP*" id="Post2" name="post"
+                                                        value="{{ old('post')}}">
                                                 </div>
                                                 <div class="col-lg-6 col-md-12 col-12">
                                                     <input type="text" placeholder="Company Name*" id="Company"
-                                                        name="Company">
+                                                        name="company" value="{{ old('company')}}">
                                                 </div>
                                                 <div class="col-lg-6 col-md-12 col-12">
-                                                    <input type="text" placeholder="Email Address*" id="email4"
-                                                        name="email">
+                                                    <input type="email" placeholder="Email Address*" id="email4"
+                                                        name="email" value="{{ $user->email ?? old('email')}}">
                                                 </div>
                                                 <div class="col-lg-6 col-md-12 col-12">
-                                                    <input type="text" placeholder="Phone*" id="email2" name="email">
+                                                    <input type="number" placeholder="Phone*" id="email2" name="phone"
+                                                        value="{{ old('phone') ?? $user->phone }}">
                                                 </div>
                                                 <div class="col-lg-12 col-md-12 col-12">
-                                                    <input type="text" placeholder="Address*" id="Adress" name="Adress">
+                                                    <input type="text" placeholder="Address*" id="Adress" name="address"
+                                                        value="{{ old('address')}}">
                                                 </div>
                                                 <div class="col-lg-12 col-md-12 col-12">
                                                     <div class="note-area">
                                                         <textarea name="massage"
-                                                            placeholder="Additional Information"></textarea>
+                                                            placeholder="Additional Information">{{ old('massage') }}</textarea>
                                                     </div>
                                                 </div>
                                             </div>
@@ -98,45 +102,40 @@
                                                 <div class="row">
                                                     <div class="col-lg-6 col-md-12 col-12">
                                                         <input type="text" placeholder="First Name*" id="fname6"
-                                                            name="fname">
+                                                            name="shippingName" value="{{ old('shippingName') }}">
                                                     </div>
                                                     <div class="col-lg-6 col-md-12 col-12">
-                                                        <input type="text" placeholder="Last Name*" id="fname7"
-                                                            name="fname">
-                                                    </div>
-                                                    <div class="col-lg-6 col-md-12 col-12">
-                                                        <select name="address" id="Country2" class="form-control">
+                                                        <select name="shippingCountry" id="Country2" class="form-control"
+                                                            value="{{ old('shippingCountry') }}">
                                                             <option disabled="" selected="">Country*</option>
-                                                            <option>United State</option>
-                                                            <option>Bangladesh</option>
-                                                            <option>India</option>
-                                                            <option>Srilanka</option>
-                                                            <option>Pakisthan</option>
-                                                            <option>Afgansthan</option>
+                                                            <option value="bangladesh">Bangladesh</option>
+                                                            <option value="india">India</option>
+                                                            <option value="pakisthan">Pakisthan</option>
                                                         </select>
                                                     </div>
                                                     <div class="col-lg-6 col-md-12 col-12">
                                                         <input type="text" placeholder="City / Town*" id="City1"
-                                                            name="City">
+                                                            name="shippingCity" value="{{ old('shippingCity')}}">
                                                     </div>
                                                     <div class="col-lg-6 col-md-12 col-12">
                                                         <input type="text" placeholder="Postcode / ZIP*" id="Post1"
-                                                            name="Post">
+                                                            name="shippingPost" value="{{ old('shippingPost')}}">
                                                     </div>
                                                     <div class="col-lg-6 col-md-12 col-12">
                                                         <input type="text" placeholder="Company Name*" id="Company1"
-                                                            name="Company">
+                                                            name="shippingCompany" value="{{ old('shippingCompany')}}">
                                                     </div>
                                                     <div class="col-lg-6 col-md-12 col-12">
                                                         <input type="text" placeholder="Email Address*" id="email5"
-                                                            name="email">
+                                                            name="shippingEmail" value="{{ old('shippingEmail')}}">
                                                     </div>
                                                     <div class="col-lg-6 col-md-12 col-12">
-                                                        <input type="text" placeholder="Phone*" id="phone1" name="email">
+                                                        <input type="text" placeholder="Phone*" id="phone1"
+                                                            name="shippingPhone" value="{{ old('shippingPhone')}}">
                                                     </div>
                                                     <div class="col-lg-12 col-md-12 col-12">
                                                         <input type="text" placeholder="Address*" id="Adress1"
-                                                            name="Adress">
+                                                            name="shippingAddress">
                                                     </div>
                                                 </div>
                                             </div>
@@ -152,30 +151,34 @@
                                     <div class="title">
                                         <h2>Products <span>Subtotal</span></h2>
                                     </div>
-                                    <div class="oreder-product">
-                                        <div class="images">
-                                            <span>
-                                                <img src="assets/images/cart/img-1.jpg" alt="">
-                                            </span>
+                                    @foreach ($cartItems ?? [] as $item)
+                                        <div class="oreder-product">
+                                            <div class="images">
+                                                <span>
+                                                    <img src="{{ $item->product?->thumbnail }}" alt="">
+                                                </span>
+                                            </div>
+                                            <div class="product">
+                                                <ul>
+                                                    <li class="first-cart">{{ Str::limit($item->product?->name, 10) }}
+                                                        (x{{ $item->quantity }})</li>
+                                                    <li>
+                                                        <div class="rating-product">
+                                                            <i class="fi flaticon-star"></i>
+                                                            <i class="fi flaticon-star"></i>
+                                                            <i class="fi flaticon-star"></i>
+                                                            <i class="fi flaticon-star"></i>
+                                                            <i class="fi flaticon-star"></i>
+                                                            <span>15</span>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <span>${{ $item->product?->discount_price > 0 ? $item->product?->discount_price * $item->quantity : $item->product?->price * $item->quantity }}</span>
                                         </div>
-                                        <div class="product">
-                                            <ul>
-                                                <li class="first-cart">Stylish Pink(x1)</li>
-                                                <li>
-                                                    <div class="rating-product">
-                                                        <i class="fi flaticon-star"></i>
-                                                        <i class="fi flaticon-star"></i>
-                                                        <i class="fi flaticon-star"></i>
-                                                        <i class="fi flaticon-star"></i>
-                                                        <i class="fi flaticon-star"></i>
-                                                        <span>15</span>
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <span>$150.00</span>
-                                    </div>
-                                    <div class="oreder-product">
+                                    @endforeach
+
+                                    {{-- <div class="oreder-product">
                                         <div class="images">
                                             <span>
                                                 <img src="assets/images/cart/img-2.jpg" alt="">
@@ -197,7 +200,7 @@
                                             </ul>
                                         </div>
                                         <span>$150.00</span>
-                                    </div>
+                                    </div> --}}
                                     <!-- Shipping -->
                                     <div class="mt-3 mb-3">
                                         <div class="title border-0">
@@ -205,17 +208,17 @@
                                         </div>
                                         <ul>
                                             <li class="free">
-                                                <input id="Free" type="radio" name="color" value="30" checked>
-                                                <label for="Free">Inside City: <span>$10.00</span></label>
+                                                <input id="Free" type="radio" name="charge" value="100" checked>
+                                                <label for="Free">Inside Dhaka: <span>$100.00</span></label>
                                             </li>
                                             <li class="free">
-                                                <input id="Local" type="radio" name="color" value="30">
-                                                <label for="Local">Outside City: <span>$20.00</span></label>
+                                                <input id="Local" type="radio" name="charge" value="150">
+                                                <label for="Local">Outside Dhaka: <span>$150.00</span></label>
                                             </li>
                                         </ul>
                                     </div>
                                     <div class="title s2">
-                                        <h2>Total<span>$300.00</span></h2>
+                                        <h2>Total<span>${{ $subTotal ?? 0 }}</span></h2>
                                     </div>
                                 </div>
                             </div>
@@ -228,16 +231,16 @@
                                                 <div class="payment-select">
                                                     <ul>
                                                         <li class="">
-                                                            <input id="remove" type="radio" name="payment" value="30">
+                                                            <input id="remove" type="radio" name="payment" value="cash">
                                                             <label for="remove">Cash on Delivery</label>
                                                         </li>
                                                         <li class="">
                                                             <input id="add" type="radio" name="payment" checked="checked"
-                                                                value="30">
+                                                                value="ssl">
                                                             <label for="add">Pay With SSLCOMMERZ</label>
                                                         </li>
                                                         <li class="">
-                                                            <input id="getway" type="radio" name="payment" value="30">
+                                                            <input id="getway" type="radio" name="payment" value="stripe">
                                                             <label for="getway">Pay With STRIPE</label>
                                                         </li>
                                                     </ul>
