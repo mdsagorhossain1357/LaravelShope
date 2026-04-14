@@ -6,17 +6,39 @@ use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\InventoryController;
+use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\Admin\SubCategoryController;
 use App\Http\Controllers\Admin\TagController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Auth\AdminAuthController;
 use Illuminate\Support\Facades\Route;
 
 
-Route::prefix('admin')->group(function () {
+Route::controller(AdminAuthController::class)->prefix('admin')->group(function(){
+    Route::get('/login', 'login')->name('admin.login');
+    Route::post('/login', 'authenticate')->name('admin.authenticate');
+    // Route::get('/logout', 'logout')->name('admin.logout');
+});
+
+Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
+
+    Route::get('/admin/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
 
     Route::controller(DashboardController::class)->group(function () {
-        Route::get('/', 'index')->name('admin.root');
+        Route::get('/dashboard', 'index')->name('admin.root');
+    });
+
+    // users routes
+    Route::controller(UserController::class)->group(function () {
+        Route::get('/users', 'index')->name('admin.user.index');
+        Route::get('/user/crate', 'create')->name('admin.user.create');
+        Route::post('/user/store', 'store')->name('admin.user.store');
+        Route::get('/user/{user}/edit', 'edit')->name('admin.user.edit');
+        Route::put('/user/{user}/update', 'update')->name('admin.user.update');
+        Route::post('/user/{user}/change-password', 'changePassword')->name('admin.user.changePassword');
+        Route::delete('/user/{user}/delete', 'delete')->name('admin.user.delete');
     });
 
     // category routes
@@ -96,5 +118,12 @@ Route::prefix('admin')->group(function () {
         Route::get('/coupon/{coupon}/edit', 'edit')->name('coupon.edit');
         Route::put('/coupon/{coupon}/update', 'update')->name('coupon.update');
         Route::delete('/coupon/{coupon}/destroy', 'destroy')->name('coupon.destroy');
+    });
+
+    // orders routes
+    Route::controller(OrderController::class)->group(function () {
+        Route::get('/orders', 'index')->name('admin.order.index');
+        Route::get('/order/{order}/show', 'show')->name('admin.order.show');
+        Route::put('/order/{order}/update', 'update')->name('admin.order.update');
     });
 });
